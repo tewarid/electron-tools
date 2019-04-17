@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Git Tool</title>
+  </head>
+  <body>
+    <a id="back" href="#">Back</a>
+    <div id="tool">
+      <div>Select Root Folder</div>
+      <input id="rootFolder" type="file" webkitdirectory>
+      <div>Select Folder(s)</div>
+      <select id="folders" multiple>
+      </select>
+      <div>Command(s) to execute</div>
+      <textarea id="commands" style="display: block">status</textarea>
+      <button id="run">Run...</button>
+      <div>Output</div>
+      <button id="clear">Clear</button>
+      <div id="log"></div>
+    </div>
+
+    <script>
+      // You can also require other files to run in this process
+      window.$ = window.jQuery = require('jquery')
+      require('./git-tool.js')
+    </script>
+  </body>
+</html>

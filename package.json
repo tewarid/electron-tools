@@ -1,22 +1,20 @@
 {
-  "name": "electron-quick-start",
+  "name": "not-tools",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Networking Tools",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
-  ],
-  "author": "GitHub",
+  "repository": "https://github.com/tewarid/net-tools-electron",
+  "keywords": [],
+  "author": "Devendra Tewari",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^4.1.4"
+    "electron": "^4.1.4",
+    "electron-rebuild": "^1.8.4"
+  },
+  "dependencies": {
+    "jquery": "^3.4.0"
   }
 }
