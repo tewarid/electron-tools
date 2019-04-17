@@ -37,7 +37,10 @@ function scanFolder(folder) {
 }
 
 $("#run").on("click", (e) => {
-    $("#folders option:selected").each((index, option) => {
+    $("#progress").css("width", "0%")
+    var options = $("#folders option:selected")
+    var i = 1;
+    options.each((index, option) => {
         var spawn = require("child_process")
         var command = "git " + $("#commands").val()
         var output = ""
@@ -50,6 +53,7 @@ $("#run").on("click", (e) => {
         })
         process.on("close", () => {
             $("#log").prepend($("<pre>").text(`${option.value} $ ${command}\n${output}`))
+            $("#progress").css("width", `${(i++)*100 / options.length}%`)
         })
     })
 })
