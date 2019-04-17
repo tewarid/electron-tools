@@ -12,10 +12,10 @@ $("#rootFolder").on("change", (e) => {
     }    
     var folder = e.target.files[0].path
     $("#folders").empty()
-    scanFolder(folder)
+    scan(folder)
 })
 
-function scanFolder(folder) {
+function scan(folder) {
     var fs = require("fs")
     var path = require("path")
     var found = false
@@ -28,7 +28,7 @@ function scanFolder(folder) {
             fs.readdir(folder, {withFileTypes: true}, (err, files) => {
                 files.forEach((f) => {
                     if (f.isDirectory()) {
-                        scanFolder(path.join(folder, f.name))
+                        scan(path.join(folder, f.name))
                     }
                 })
             })        
@@ -37,14 +37,30 @@ function scanFolder(folder) {
 }
 
 $("#run").on("click", (e) => {
-    $("#progress").css("width", "0%")
-    var options = $("#folders option:selected")
-    var i = 1;
-    options.each((index, option) => {
+    $("#spinner").removeClass("d-none")
+    var promises = []
+    $("#folders option:selected").each((index, option) => {
+        var commands = $("#commands").val().split("\n")
+        commands.forEach((c) => {
+            $("#spinner").removeClass("d-none")
+            var command = "git " + c
+            var promise = execute(option.value, command)
+            promises.push(promise)
+            promise.then((value) => {
+                $("#log").prepend($("<pre>").text(`${option.value} $ ${command}\n${value}`))
+            })    
+        })
+    })
+    Promise.all(promises).then(() => {
+        $("#spinner").addClass("d-none")
+    })
+})
+
+function execute(folder, command) {
+    return promise = new Promise(function(resolve) {
         var spawn = require("child_process")
-        var command = "git " + $("#commands").val()
         var output = ""
-        var process = spawn.exec(command, {cwd: option.value})
+        var process = spawn.exec(command, {cwd: folder})
         process.stdout.on("data", (data) => {
             output += data
         })
@@ -52,11 +68,10 @@ $("#run").on("click", (e) => {
             output += data            
         })
         process.on("close", () => {
-            $("#log").prepend($("<pre>").text(`${option.value} $ ${command}\n${output}`))
-            $("#progress").css("width", `${(i++)*100 / options.length}%`)
+            resolve(output)
         })
-    })
-})
+    });
+}
 
 $("#clear").on("click", (e) => {
     $("#log").text("")
