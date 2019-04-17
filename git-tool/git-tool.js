@@ -36,13 +36,24 @@ function scan(folder) {
     })
 }
 
+function getSelectedCommands() {
+    var input = $("#commands")[0]
+    var commands = input.value
+    if (input.selectionStart !==  input.selectionEnd) {
+        commands = commands.slice(input.selectionStart, input.selectionEnd)
+    }
+    return commands.split("\n")
+}
+
 $("#run").on("click", (e) => {
     $("#spinner").removeClass("d-none")
     var promises = []
     $("#folders option:selected").each((index, option) => {
-        var commands = $("#commands").val().split("\n")
+        var commands = getSelectedCommands()
         commands.forEach((c) => {
-            $("#spinner").removeClass("d-none")
+            if (c.trim() === "") {
+                return
+            }
             var command = "git " + c
             var promise = execute(option.value, command)
             promises.push(promise)
