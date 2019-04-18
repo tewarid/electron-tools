@@ -1,3 +1,4 @@
-// This file is required by the index.html file and will
-// be executed in the renderer process for that window.
-// All of the Node.js APIs are available in this process.
+var id = 1
+$(".list-group-item").on("click", (e) => {
+    window.open(`${e.target.id}/${e.target.id}.html`, `${e.target.id}-${id++}`, "menubar=no", false)
+})
