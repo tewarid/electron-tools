@@ -7,10 +7,15 @@
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
   </head>
   <body>
-    <a id="back" href="#" class="btn btn-secondary">Back</a>
     <div class="form-group">
-      <label>Select root folder</label>
-      <input id="rootFolder" type="file" class="form-control" webkitdirectory>
+      <a id="back" href="#" class="btn btn-secondary">Back</a>
+    </div>      
+    <div class="form-group">
+      <div class="input-group">
+          <div class="custom-file">
+            <input id="rootFolder" type="file" class="custom-file-input" webkitdirectory>
+            <label class="custom-file-label" for="rootFolder">Pick root folder</label>
+        </div>
     </div>      
     <div class="form-group">
       <label>Select Git repo(s)</label>

@@ -11,6 +11,7 @@ $("#rootFolder").on("change", (e) => {
         return
     }    
     var folder = e.target.files[0].path
+    $("label[for='rootFolder']").text(folder)
     $("#folders").empty()
     scan(folder)
 })
