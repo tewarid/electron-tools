@@ -3,7 +3,22 @@ $("#back").on("click", () => {
 })
 
 $(document).ready(() => {
+    var url = window.localStorage.getItem("gitlab-tool.url")
+    if (url) {
+        $("#url").val(url)
+    }
+    var token = window.localStorage.getItem("gitlab-tool.token")
+    if (token) {
+        $("#token").val(token)
+    }
+})
 
+$("#url").on("input", (e) => {
+    window.localStorage.setItem("gitlab-tool.url", e.target.value)
+})
+
+$("#token").on("input", (e) => {
+    window.localStorage.setItem("gitlab-tool.token", e.target.value)
 })
 
 $("#query").on("click", () => {
