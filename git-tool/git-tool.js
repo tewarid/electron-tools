@@ -47,25 +47,42 @@ function getSelectedCommands() {
 
 $("#run").on("click", (e) => {
     $("#spinner").removeClass("d-none")
-    var promises = []
+    var config = {}
+    config.commands = []
+    config.executed = function(folder, command, output) {
+        $("#log").prepend($("<pre>")
+        .text(`${folder} $ ${command}\n${output}`))
+    },
+    config.completed = function() {
+        $("#spinner").addClass("d-none")
+    }
     $("#folders option:selected").each((index, option) => {
-        var commands = getSelectedCommands()
-        commands.forEach((c) => {
+        getSelectedCommands().forEach((c) => {
             if (c.trim() === "") {
                 return
             }
-            var command = "git " + c
-            var promise = execute(option.value, command)
-            promises.push(promise)
-            promise.then((value) => {
-                $("#log").prepend($("<pre>").text(`${option.value} $ ${command}\n${value}`))
-            })    
+            config.commands.push({
+                folder: option.value,
+                command: "git " + c,
+            })
         })
     })
-    Promise.all(promises).then(() => {
-        $("#spinner").addClass("d-none")
-    })
+    config.commands.reverse()
+    process(config)
 })
+
+function process(config) {
+    var command = config.commands.pop()
+    execute(command.folder, command.command)
+    .then((value) => {
+        config.executed(command.folder, command.command, value)
+        if (config.commands.length > 0) {
+            process(config)
+        } else {
+            config.completed()
+        }
+    })
+}
 
 function execute(folder, command) {
     return promise = new Promise(function(resolve) {
