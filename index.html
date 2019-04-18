@@ -2,20 +2,21 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Networking Tools</title>
-    <style>
-      div#menu > a {display: block;}
-    </style>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
   </head>
   <body>
-    <div id="menu">
-      <a href="git-tool/git-tool.html">Git Tool</a>
-      <a href="gitlab-tool/gitlab-tool.html">GitLab Tool</a>
+    <div id="menu" class="list-group">
+      <a href="git-tool/git-tool.html" class="list-group-item list-group-item-action">Git Tool</a>
+      <a href="gitlab-tool/gitlab-tool.html" class="list-group-item list-group-item-action">GitLab Tool</a>
     </div>
     <script>
       // You can also require other files to run in this process
       window.$ = window.jQuery = require('jquery')
       require('./renderer.js')
+      require('popper.js')
+      require('bootstrap')
     </script>
   </body>
 </html>

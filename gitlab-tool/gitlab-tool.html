@@ -2,17 +2,17 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>GitLab Tool</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
   </head>
   <body>
-    <a id="back" href="#">Back</a>
-    <div id="tool">
-      GitLab Tool
-    </div>
-
-    <script>
+      <a id="back" href="#" class="btn btn-secondary">Back</a>
+      <script>
       // You can also require other files to run in this process
       window.$ = window.jQuery = require('jquery')
+      require('popper.js')
+      require('bootstrap')
       require('./gitlab-tool.js')
     </script>
   </body>
