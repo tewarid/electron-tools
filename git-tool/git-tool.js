@@ -91,15 +91,15 @@ $("#run").on("click", (e) => {
 })
 
 function process(config) {
+    if (config.commands.length == 0) {
+        config.completed()
+        return
+    }
     var command = config.commands.pop()
     execute(command.folder, command.command)
     .then((value) => {
         config.executed(command.folder, command.command, value)
-        if (config.commands.length > 0) {
-            process(config)
-        } else {
-            config.completed()
-        }
+        process(config)
     })
 }
 
