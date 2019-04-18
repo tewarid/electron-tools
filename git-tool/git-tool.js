@@ -13,23 +13,24 @@ $("#rootFolder").on("change", (e) => {
     var folder = e.target.files[0].path
     $("label[for='rootFolder']").text(folder)
     $("#folders").empty()
-    scan(folder)
+    scan(folder, (value) => {
+        $("#folders").append($("<option>")
+        .text(value)
+        .attr("value", value))
+    })
 })
 
-function scan(folder) {
+function scan(folder, found) {
     var fs = require("fs")
     var path = require("path")
-    var found = false
     fs.access(path.join(folder, ".git"), fs.constants.F_OK, (err) => {
         if (!err) {
-            $("#folders").append($("<option>")
-                .text(folder)
-                .attr("value", folder))
+            found(folder)
         } else {
             fs.readdir(folder, {withFileTypes: true}, (err, files) => {
                 files.forEach((f) => {
                     if (f.isDirectory()) {
-                        scan(path.join(folder, f.name))
+                        scan(path.join(folder, f.name), found)
                     }
                 })
             })        
@@ -48,14 +49,15 @@ function getSelectedCommands() {
 
 $("#run").on("click", (e) => {
     $("#spinner").removeClass("d-none")
-    var config = {}
-    config.commands = []
-    config.executed = function(folder, command, output) {
-        $("#log").prepend($("<pre>")
-        .text(`${folder} $ ${command}\n${output}`))
-    },
-    config.completed = function() {
-        $("#spinner").addClass("d-none")
+    var config = {
+        commands: [],
+        executed: (folder, command, output) => {
+            $("#log").prepend($("<pre>")
+            .text(`${folder} $ ${command}\n${output}`))
+        },
+        completed: () => {
+            $("#spinner").addClass("d-none")
+        }
     }
     $("#folders option:selected").each((index, option) => {
         getSelectedCommands().forEach((c) => {
