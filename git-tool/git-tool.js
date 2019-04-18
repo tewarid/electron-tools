@@ -3,24 +3,36 @@ $("#back").on("click", () => {
 })
 
 $(document).ready(() => {
-
+    var folder = window.localStorage.getItem("git-tool.rootFolder")
+    if (folder) {
+        scan(folder)
+    }
+    var commands = window.localStorage.getItem("git-tool.commands")
+    if (commands) {
+        $("#commands").text(commands)
+    }
 })
 
 $("#rootFolder").on("change", (e) => {
     if (e.target.files[0] === undefined) {
         return
-    }    
+    }
     var folder = e.target.files[0].path
+    window.localStorage.setItem("git-tool.rootFolder", folder)
+    scan(folder)
+})
+
+function scan(folder) {
     $("label[for='rootFolder']").text(folder)
     $("#folders").empty()
-    scan(folder, (value) => {
+    find(folder, (value) => {
         $("#folders").append($("<option>")
         .text(value)
         .attr("value", value))
     })
-})
+}
 
-function scan(folder, found) {
+function find(folder, found) {
     var fs = require("fs")
     var path = require("path")
     fs.access(path.join(folder, ".git"), fs.constants.F_OK, (err) => {
@@ -30,13 +42,17 @@ function scan(folder, found) {
             fs.readdir(folder, {withFileTypes: true}, (err, files) => {
                 files.forEach((f) => {
                     if (f.isDirectory()) {
-                        scan(path.join(folder, f.name), found)
+                        find(path.join(folder, f.name), found)
                     }
                 })
             })        
         }
     })
 }
+
+$("#commands").on("input", (e) => {
+    window.localStorage.setItem("git-tool.commands", e.target.value)
+})
 
 function getSelectedCommands() {
     var input = $("#commands")[0]
