@@ -3,14 +3,9 @@ $("#back").on("click", () => {
 })
 
 $(document).ready(() => {
-    var folder = window.localStorage.getItem("git-tool.rootFolder")
-    if (folder) {
-        scan(folder)
-    }
-    var commands = window.localStorage.getItem("git-tool.commands")
-    if (commands) {
-        $("#commands").text(commands)
-    }
+    scan(window.localStorage.getItem("git-tool.rootFolder"))
+    $("#commands").text(window.localStorage.getItem("git-tool.commands"))
+    $("#log").text(window.localStorage.getItem("git-tool.log"))
 })
 
 $("#rootFolder").on("change", (e) => {
@@ -23,6 +18,9 @@ $("#rootFolder").on("change", (e) => {
 })
 
 function scan(folder) {
+    if (folder === undefined) {
+        return
+    }
     $("label[for='rootFolder']").text(folder)
     $("#folders").empty()
     find(folder, (value) => {
@@ -68,11 +66,11 @@ $("#run").on("click", (e) => {
     var config = {
         commands: [],
         executed: (folder, command, output) => {
-            $("#log").prepend($("<pre>")
-            .text(`${folder} $ ${command}\n${output}`))
+            $("#log").prepend(`${folder} $ ${command}\n${output}\n`)
         },
         completed: () => {
             $("#spinner").addClass("d-none")
+            window.localStorage.setItem("git-tool.log", $("#log").text())
         }
     }
     $("#folders option:selected").each((index, option) => {
@@ -122,4 +120,5 @@ function execute(folder, command) {
 
 $("#clear").on("click", (e) => {
     $("#log").text("")
+    window.localStorage.setItem("git-tool.log", "")
 })
