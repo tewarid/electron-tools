@@ -1,1 +1,6 @@
 node_modules
+/net-tools-linux-arm64
+/net-tools-linux-armv7l
+/net-tools-linux-x64
+/net-tools-win32-ia32
+/net-tools-win32-x64
