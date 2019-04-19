@@ -1,5 +1,5 @@
 {
-  "name": "not-tools",
+  "name": "net-tools",
   "version": "1.0.0",
   "description": "Networking Tools",
   "main": "main.js",
