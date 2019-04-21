@@ -66,7 +66,8 @@ $("#run").on("click", (e) => {
     var config = {
         commands: [],
         executed: (folder, command, output) => {
-            $("#log").prepend(`${folder} $ ${command}\n${output}\n`)
+            $("#log").prepend(`$ ${command}\n${output}\n`)
+            $("#log").prepend(`${(new Date()).toISOString()} ${folder}\n`)
         },
         completed: () => {
             $("#spinner").addClass("d-none")
