@@ -21,4 +21,4 @@ electron-packager . --all
 
 ## License
 
-[MIT)](LICENSE.md)
+[MIT](LICENSE.md)
