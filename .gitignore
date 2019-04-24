@@ -6,3 +6,4 @@ node_modules
 *-win32-x64
 *-darwin-x64
 *-mas-x64
+dist

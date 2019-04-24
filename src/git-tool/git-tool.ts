@@ -1,3 +1,7 @@
+import * as fs from "fs"
+import * as path from "path"
+import * as spawn from "child_process"
+
 $("#back").on("click", () => {
     window.history.back()
 })
@@ -9,36 +13,34 @@ $(document).ready(() => {
 })
 
 $("#rootFolder").on("change", (e) => {
-    if (e.target.files[0] === undefined) {
+    if ((<HTMLInputElement>e.target).files[0] == null) {
         return
     }
-    var folder = e.target.files[0].path
+    var folder = (<HTMLInputElement>e.target).files[0].path
     window.localStorage.setItem("git-tool.rootFolder", folder)
     scan(folder)
 })
 
-function scan(folder) {
-    if (folder === undefined) {
+function scan(folder: string) {
+    if (folder == null) {
         return
     }
     $("label[for='rootFolder']").text(folder)
     $("#folders").empty()
-    find(folder, (value) => {
+    find(folder, (value: string) => {
         $("#folders").append($("<option>")
         .text(value)
         .attr("value", value))
     })
 }
 
-function find(folder, found) {
-    var fs = require("fs")
-    var path = require("path")
+function find(folder: string, found: Function) {
     fs.access(path.join(folder, ".git"), fs.constants.F_OK, (err) => {
         if (!err) {
             found(folder)
         } else {
-            fs.readdir(folder, {withFileTypes: true}, (err, files) => {
-                files.forEach((f) => {
+            fs.readdir(folder, {withFileTypes: true}, (err: any, files) => {
+                files.forEach((f: any) => {
                     if (f.isDirectory()) {
                         find(path.join(folder, f.name), found)
                     }
@@ -49,11 +51,11 @@ function find(folder, found) {
 }
 
 $("#commands").on("input", (e) => {
-    window.localStorage.setItem("git-tool.commands", e.target.value)
+    window.localStorage.setItem("git-tool.commands", (<HTMLInputElement>e.target).value)
 })
 
 function getSelectedCommands() {
-    var input = $("#commands")[0]
+    var input = <HTMLInputElement>$("#commands")[0]
     var commands = input.value
     if (input.selectionStart !==  input.selectionEnd) {
         commands = commands.slice(input.selectionStart, input.selectionEnd)
@@ -61,27 +63,34 @@ function getSelectedCommands() {
     return commands.split("\n")
 }
 
+class Command {
+    command: string;
+    folder: string;
+}
+
+class Config {
+    commands: Command[] = new Array()
+    executed(folder: string, command: string, output: string) {
+        $("#log").prepend(`$ ${command}\n${output}\n`)
+        $("#log").prepend(`${(new Date()).toISOString()} ${folder}\n`)
+    }
+    completed() {
+        $("#spinner").addClass("d-none")
+        window.localStorage.setItem("git-tool.log", $("#log").text())
+    }
+}
+
 $("#run").on("click", (e) => {
     $("#spinner").removeClass("d-none")
-    var config = {
-        commands: [],
-        executed: (folder, command, output) => {
-            $("#log").prepend(`$ ${command}\n${output}\n`)
-            $("#log").prepend(`${(new Date()).toISOString()} ${folder}\n`)
-        },
-        completed: () => {
-            $("#spinner").addClass("d-none")
-            window.localStorage.setItem("git-tool.log", $("#log").text())
-        }
-    }
+    var config = new Config()
     $("#folders option:selected").each((index, option) => {
-        getSelectedCommands().forEach((c) => {
+        getSelectedCommands().forEach((c: string) => {
             if (c.trim() === "") {
                 return
             }
             config.commands.push({
-                folder: option.value,
                 command: "git " + c,
+                folder: (<HTMLInputElement>option).value
             })
         })
     })
@@ -89,23 +98,22 @@ $("#run").on("click", (e) => {
     process(config)
 })
 
-function process(config) {
+function process(config: Config) {
     if (config.commands.length == 0) {
         config.completed()
         return
     }
     var command = config.commands.pop()
     execute(command.folder, command.command)
-    .then((value) => {
+    .then((value: string) => {
         config.executed(command.folder, command.command, value)
         process(config)
     })
 }
 
-function execute(folder, command) {
-    return promise = new Promise(function(resolve) {
-        var spawn = require("child_process")
-        var output = ""
+function execute(folder: string, command: string) {
+    return new Promise(function(resolve) {
+        var output: string = ""
         var process = spawn.exec(command, {cwd: folder})
         process.stdout.on("data", (data) => {
             output += data
