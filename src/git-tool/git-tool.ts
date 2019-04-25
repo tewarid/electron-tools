@@ -21,16 +21,19 @@ $("#rootFolder").on("change", (e) => {
     scan(folder);
 });
 
-function scan(folder: string) {
-    if (folder == null) {
+function scan(root: string) {
+    if (root == null) {
         return;
     }
-    $("label[for='rootFolder']").text(folder);
+    $("label[for='rootFolder']").text(root);
     $("#folders").empty();
-    find(folder, (value: string) => {
-        $("#folders").append($("<option>")
-        .text(value)
-        .attr("value", value));
+    const selected = JSON.parse(window.localStorage.getItem("git-tool.selectedFolders")) as string[];
+    find(root, (value: string) => {
+        const option = $("<option>").text(value).attr("value", value);
+        if (selected && selected.indexOf(value) !== -1) {
+            option.attr("selected", "");
+        }
+        $("#folders").append(option);
     });
 }
 
@@ -49,6 +52,14 @@ function find(folder: string, found: (folder: string) => void) {
         }
     });
 }
+
+$("#folders").on("input", (e) => {
+    const selected = new Array();
+    $("#folders option:selected").each((index, option) => {
+        selected.push((option as HTMLInputElement).value);
+    });
+    window.localStorage.setItem("git-tool.selectedFolders", JSON.stringify(selected));
+});
 
 $("#commands").on("input", (e) => {
     window.localStorage.setItem("git-tool.commands", (e.target as HTMLInputElement).value);
