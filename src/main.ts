@@ -9,11 +9,12 @@ let mainWindow: Electron.BrowserWindow;
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
     height: 600,
+    icon: __dirname + "/app.ico",
     webPreferences: {
       nodeIntegration: true
-    }
+    },
+    width: 800,
   });
 
   // and load the index.html of the app.
