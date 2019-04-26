@@ -23,4 +23,4 @@ electron-packager . --all
 
 [MIT](LICENSE.md)
 
-Icons courtesy of https://material.io.
+Icons courtesy of https://material.io and https://iconverticons.com/online/.
