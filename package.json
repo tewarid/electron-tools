@@ -7,12 +7,15 @@
     "build": "tsc && cpx \"src/**/*.{html,png,jpg,ico,icns}\" dist",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "start": "npm run build && electron ./dist/main.js",
-    "package": "npm run build && electron-packager . --all --overwrite --icon ./dist/app.icns --ignore=src --ignore=.*js.map --ignore=.vscode --ignore=tsconfig.json --ignore=tslint.json"
+    "package": "npm run build && electron-packager . \"Networking Tools\" --all --overwrite --icon ./dist/app.icns --ignore=src --ignore=.*js.map --ignore=.vscode --ignore=tsconfig.json --ignore=tslint.json"
   },
   "repository": "https://github.com/tewarid/net-tools-electron",
   "keywords": [
     "Electron",
-    "net-tools"
+    "Networking",
+    "Tool",
+    "Git",
+    "GitLab"
   ],
   "author": "Devendra Tewari",
   "license": "MIT",

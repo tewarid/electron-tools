@@ -22,3 +22,5 @@ electron-packager . --all
 ## License
 
 [MIT](LICENSE.md)
+
+Icons courtesy of https://material.io.
