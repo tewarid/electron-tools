@@ -1,8 +1,8 @@
 // Modules to control application life and create native browser window
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, Menu } from "electron";
 import * as path from "path";
 
-// Keep a global reference of the window object, if you don't, the window will
+// Keep a global reference of the window object, if you don"t, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow: Electron.BrowserWindow;
 
@@ -44,12 +44,109 @@ app.on("window-all-closed", () => {
 });
 
 app.on("activate", () => {
-  // On macOS it's common to re-create a window in the app when the
+  // On macOS it"s common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
     createWindow();
   }
 });
 
-// In this file you can include the rest of your app's specific main process
+// In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+const isMac = process.platform === "darwin";
+const template = [
+  // { role: "appMenu" }
+  ...(isMac ? [{
+    label: app.getName(),
+    submenu: [
+      { role: "about" },
+      { type: "separator" },
+      { role: "services" },
+      { type: "separator" },
+      { role: "hide" },
+      { role: "hideothers" },
+      { role: "unhide" },
+      { type: "separator" },
+      { role: "quit" },
+    ],
+  }] : []),
+  // { role: "fileMenu" }
+  {
+    label: "File",
+    submenu: [
+      isMac ? { role: "close" } : { role: "quit" },
+    ],
+  },
+  // { role: "editMenu" }
+  {
+    label: "Edit",
+    submenu: [
+      { role: "undo" },
+      { role: "redo" },
+      { type: "separator" },
+      { role: "cut" },
+      { role: "copy" },
+      { role: "paste" },
+      ...(isMac ? [
+        { role: "pasteAndMatchStyle" },
+        { role: "delete" },
+        { role: "selectAll" },
+        { type: "separator" },
+        {
+          label: "Speech",
+          submenu: [
+            { role: "startspeaking" },
+            { role: "stopspeaking" },
+          ],
+        },
+      ] : [
+        { role: "delete" },
+        { type: "separator" },
+        { role: "selectAll" },
+      ]),
+    ],
+  },
+  // { role: "viewMenu" }
+  {
+    label: "View",
+    submenu: [
+      { role: "reload" },
+      { role: "forcereload" },
+      { role: "toggledevtools" },
+      { type: "separator" },
+      { role: "resetzoom" },
+      { role: "zoomin" },
+      { role: "zoomout" },
+      { type: "separator" },
+      { role: "togglefullscreen" },
+    ],
+  },
+  // { role: "windowMenu" }
+  {
+    label: "Window",
+    submenu: [
+      { role: "minimize" },
+      { role: "zoom" },
+      ...(isMac ? [
+        { type: "separator" },
+        { role: "front" },
+        { type: "separator" },
+        { role: "window" },
+      ] : [
+        { role: "close" },
+      ]),
+    ],
+  },
+  {
+    role: "help",
+    submenu: [
+      {
+        label: "Learn More",
+        click() { require("electron").shell.openExternal("https://github.com/tewarid/net-tools-electron"); },
+      },
+    ],
+  },
+];
+
+const menu = Menu.buildFromTemplate(template as any);
+Menu.setApplicationMenu(menu);
