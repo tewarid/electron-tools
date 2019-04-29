@@ -9,14 +9,19 @@ npm install
 npm run start
 ```
 
+For productivity during development, you may want to run electron, and TypeScript compiler and cpx in watch mode
+
+```bash
+npm run dev
+```
+
 ## Package using electron-packager
 
 ```bash
 git clone https://github.com/tewarid/net-tools-electron
 cd net-tools-electron
 npm install
-npm install electron-packager -g
-electron-packager . --all
+npm run package
 ```
 
 ## License
