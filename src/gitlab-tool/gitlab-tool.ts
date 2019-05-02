@@ -47,8 +47,8 @@ $("#query").on("click", () => {
                     row.append($("<td>").text(m.title));
                     row.append($("<td>").text(p.name));
                     row.append($("<td>").text(m.state));
-                    row.append($("<td>").text(m.due_date));
-                    row.append($("<td>").text(m.start_date));
+                    row.append($("<td>").text(m.due_date).addClass("text-nowrap"));
+                    row.append($("<td>").text(m.start_date).addClass("text-nowrap"));
                 });
             });
         });
