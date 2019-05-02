@@ -8,8 +8,8 @@
   </head>
   <body>
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm">
+      <div class="row vh-100">
+        <div class="col-sm-12 col-lg-5">
           <div class="form-group">
             <label for="folders">Select root folder</label>
             <div class="custom-file">
@@ -22,6 +22,8 @@
             <select id="folders" class="form-control" multiple>
             </select>
           </div>
+        </div>
+        <div class="col-sm-12 col-lg-7">
           <div class="form-group">
             <label for="commands">Git command(s)</label>
             <textarea id="commands" class="form-control">status</textarea>
