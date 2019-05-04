@@ -4,10 +4,6 @@ import * as fs from "fs";
 import * as path from "path";
 import * as xterm from "xterm";
 
-const term = new xterm.Terminal();
-term.setOption("convertEol", true);
-term.open(document.getElementById("log"));
-
 const code = CodeMirror.fromTextArea(document.getElementById("commands")as HTMLTextAreaElement, {
     lineNumbers: true,
     mode: "shell",
@@ -16,6 +12,11 @@ code.setSize(null, "100");
 CodeMirror.on(code.getDoc(), "change", (instance, change) => {
     window.localStorage.setItem("git-tool.commands", code.getValue());
 });
+
+const term = new xterm.Terminal();
+term.setOption("convertEol", true);
+term.resize(80, 30);
+term.open(document.getElementById("log"));
 
 $("#back").on("click", () => {
     window.history.back();
