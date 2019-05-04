@@ -10,6 +10,7 @@ const code = CodeMirror.fromTextArea(document.getElementById("commands")as HTMLT
     mode: "shell",
 });
 code.setSize(null, "100");
+$(".CodeMirror").addClass("border border-primary rounded");
 CodeMirror.on(code.getDoc(), "change", (instance, change) => {
     window.localStorage.setItem("git-tool.commands", code.getValue());
 });
