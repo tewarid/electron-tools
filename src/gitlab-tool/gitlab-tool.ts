@@ -1,15 +1,64 @@
 import {Gitlab} from "gitlab";
+import * as ko from "knockout";
 
-$(document).ready(() => {
-    const url = window.localStorage.getItem("gitlab-tool.url");
-    if (url) {
-        $("#host").val(url);
+class GitLabToolViewModel {
+    public host: KnockoutObservable<string>;
+    public token: KnockoutObservable<string>;
+    public projects: KnockoutObservableArray<any>;
+    public milestones: KnockoutObservableArray<any>;
+
+    constructor(host: string, token: string) {
+        this.host = ko.observable(host);
+        this.token = ko.observable(token);
+        this.projects = ko.observableArray();
+        this.milestones = ko.observableArray();
     }
-    const token = window.localStorage.getItem("gitlab-tool.token");
-    if (token) {
-        $("#token").val(token);
+
+    public query() {
+        $("#spinner").removeClass("d-none");
+        const api = new Gitlab({
+            host: this.host(),
+            token: this.token(),
+            url: "",
+        });
+        api.Projects.all()
+        .then((projects: any) => {
+            this.projects.removeAll();
+            this.milestones.removeAll();
+            projects.forEach((p: any) => {
+                this.projects.push({
+                    httpUrl: p.http_url_to_repo,
+                    id: p.id,
+                    name: p.name,
+                    namespace: p.namespace.full_path,
+                    sshUrl: p.ssh_url_to_repo,
+                });
+                api.ProjectMilestones.all(p.id)
+                .then((milestones: any) => {
+                    milestones.forEach((m: any) => {
+                        this.milestones.push({
+                            dueDate: m.due_date,
+                            id: m.id,
+                            projectId: p.id,
+                            projectName: p.name,
+                            startDate: m.start_date,
+                            state: m.state,
+                            title: m.title,
+                        });
+                    });
+                }, (reason) => {
+                    // do nothing
+                });
+            });
+            $("#spinner").addClass("d-none");
+        }, (reason) => {
+            $("#spinner").addClass("d-none");
+        });
     }
-});
+}
+
+ko.applyBindings(new GitLabToolViewModel(window.localStorage.getItem("gitlab-tool.url"),
+    window.localStorage.getItem("gitlab-tool.token")));
 
 $("#host").on("input", (e) => {
     window.localStorage.setItem("gitlab-tool.url", (e.target as HTMLInputElement).value);
@@ -17,39 +66,6 @@ $("#host").on("input", (e) => {
 
 $("#token").on("input", (e) => {
     window.localStorage.setItem("gitlab-tool.token", (e.target as HTMLInputElement).value);
-});
-
-$("#query").on("click", () => {
-    $("#spinner").removeClass("d-none");
-    const api = new Gitlab({
-        host: $("#host").val().toString(),
-        token: $("#token").val().toString(),
-    });
-    api.Projects.all()
-    .then((projects: any) => {
-        $("#projects tbody").empty();
-        projects.forEach((p: any) => {
-            api.ProjectMilestones.all(p.id, {})
-            .then((milestones: any) => {
-                let row = $("#projects tbody").append($("<tr>"));
-                row.append($("<td>").text(p.id));
-                row.append($("<td>").text(p.name));
-                row.append($("<td>").text(p.namespace.full_path));
-                row.append($("<td>").text(p.http_url_to_repo));
-                row.append($("<td>").text(p.ssh_url_to_repo));
-                milestones.forEach((m: any) => {
-                    row = $("#milestones tbody").append($("<tr>"));
-                    row.append($("<td>").text(m.id));
-                    row.append($("<td>").text(m.title));
-                    row.append($("<td>").text(p.name));
-                    row.append($("<td>").text(m.state));
-                    row.append($("<td>").text(m.due_date).addClass("text-nowrap"));
-                    row.append($("<td>").text(m.start_date).addClass("text-nowrap"));
-                });
-            });
-        });
-        $("#spinner").addClass("d-none");
-    });
 });
 
 $("#viewProjects").on("change", (e) => {
