@@ -19,6 +19,7 @@ const term = new xterm.Terminal();
 term.setOption("convertEol", true);
 term.resize(80, 30);
 term.open(document.getElementById("log"));
+$(".xterm").addClass("border border-secondary rounded");
 
 $("#back").on("click", () => {
     window.history.back();
