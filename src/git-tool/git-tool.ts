@@ -1,5 +1,6 @@
 import * as spawn from "child_process";
 import CodeMirror from "codemirror";
+import "codemirror/mode/shell/shell";
 import * as fs from "fs";
 import * as path from "path";
 import * as xterm from "xterm";
