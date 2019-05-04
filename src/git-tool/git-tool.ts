@@ -21,10 +21,6 @@ term.resize(80, 30);
 term.open(document.getElementById("log"));
 $(".xterm").addClass("border border-secondary rounded");
 
-$("#back").on("click", () => {
-    window.history.back();
-});
-
 $(document).ready(() => {
     scan(window.localStorage.getItem("git-tool.rootFolder"));
     code.setValue(window.localStorage.getItem("git-tool.commands"));

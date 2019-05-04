@@ -1,9 +1,5 @@
 import {Gitlab} from "gitlab";
 
-$("#back").on("click", () => {
-    window.history.back();
-});
-
 $(document).ready(() => {
     const url = window.localStorage.getItem("gitlab-tool.url");
     if (url) {
