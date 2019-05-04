@@ -1,4 +1,5 @@
 import * as spawn from "child_process";
+import CodeMirror from "codemirror";
 import * as fs from "fs";
 import * as path from "path";
 import * as xterm from "xterm";
@@ -7,13 +8,22 @@ const term = new xterm.Terminal();
 term.setOption("convertEol", true);
 term.open(document.getElementById("log"));
 
+const code = CodeMirror.fromTextArea(document.getElementById("commands")as HTMLTextAreaElement, {
+    lineNumbers: true,
+    mode: "shell",
+});
+code.setSize(null, "100");
+CodeMirror.on(code.getDoc(), "change", (instance, change) => {
+    window.localStorage.setItem("git-tool.commands", code.getValue());
+});
+
 $("#back").on("click", () => {
     window.history.back();
 });
 
 $(document).ready(() => {
     scan(window.localStorage.getItem("git-tool.rootFolder"));
-    $("#commands").text(window.localStorage.getItem("git-tool.commands"));
+    code.setValue(window.localStorage.getItem("git-tool.commands"));
     term.write(window.localStorage.getItem("git-tool.log"));
 });
 
@@ -66,15 +76,10 @@ $("#folders").on("input", (e) => {
     window.localStorage.setItem("git-tool.selectedFolders", JSON.stringify(selected));
 });
 
-$("#commands").on("input", (e) => {
-    window.localStorage.setItem("git-tool.commands", (e.target as HTMLInputElement).value);
-});
-
 function getSelectedCommands() {
-    const input = $("#commands")[0] as HTMLInputElement;
-    let commands = input.value;
-    if (input.selectionStart !==  input.selectionEnd) {
-        commands = commands.slice(input.selectionStart, input.selectionEnd);
+    let commands = code.getDoc().getSelection();
+    if (commands === "") {
+        commands = code.getValue();
     }
     return commands.split("\n");
 }
