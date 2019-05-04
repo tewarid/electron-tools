@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Git Tool</title>
     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../../node_modules/xterm/dist/xterm.css" />
   </head>
   <body>
     <div class="container-fluid">
@@ -35,11 +36,13 @@
             </button>
           </div>
           <div class="form-group">
-            <button id="clear" class="btn btn-secondary float-right">Clear</button>
             <label for="log">Output</label>
-            <pre id="log"></pre>
+            <div id="log" class=""></div>
           </div>
-        </div>
+          <div class="form-group">
+              <button id="clear" class="btn btn-secondary float-right">Clear</button>
+            </div>
+          </div>
       </div>
     </div>
     <script>

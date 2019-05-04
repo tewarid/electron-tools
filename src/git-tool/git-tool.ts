@@ -1,6 +1,11 @@
 import * as spawn from "child_process";
 import * as fs from "fs";
 import * as path from "path";
+import * as xterm from "xterm";
+
+const term = new xterm.Terminal();
+term.setOption("convertEol", true);
+term.open(document.getElementById("log"));
 
 $("#back").on("click", () => {
     window.history.back();
@@ -9,7 +14,7 @@ $("#back").on("click", () => {
 $(document).ready(() => {
     scan(window.localStorage.getItem("git-tool.rootFolder"));
     $("#commands").text(window.localStorage.getItem("git-tool.commands"));
-    $("#log").text(window.localStorage.getItem("git-tool.log"));
+    term.write(window.localStorage.getItem("git-tool.log"));
 });
 
 $("#rootFolder").on("change", (e) => {
@@ -80,11 +85,13 @@ $("#run").on("click", (e) => {
         commands: new Array(),
         completed: () => {
             $("#spinner").addClass("d-none");
-            window.localStorage.setItem("git-tool.log", $("#log").text());
         },
         executed: (folder: string, command: string, output: string) => {
-            $("#log").prepend(`$ ${command}\n${output}\n`);
-            $("#log").prepend(`${(new Date()).toISOString()} ${folder}\n`);
+            let s = `${(new Date()).toISOString()} ${folder}\n`;
+            s += `$ ${command}\n${output}\n`;
+            term.write(s);
+            window.localStorage.setItem("git-tool.log",
+                window.localStorage.getItem("git-tool.log") + s);
         },
     };
     $("#folders option:selected").each((index, option) => {
@@ -132,6 +139,6 @@ function execute(folder: string, command: string) {
 }
 
 $("#clear").on("click", (e) => {
-    $("#log").text("");
+    term.clear();
     window.localStorage.setItem("git-tool.log", "");
 });
