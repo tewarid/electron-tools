@@ -2,10 +2,10 @@ import {Gitlab} from "gitlab";
 import * as ko from "knockout";
 
 class GitLabToolViewModel {
-    public host: KnockoutObservable<string>;
-    public token: KnockoutObservable<string>;
-    public projects: KnockoutObservableArray<any>;
-    public milestones: KnockoutObservableArray<any>;
+    public host: ko.Observable<string>;
+    public token: ko.Observable<string>;
+    public projects: ko.ObservableArray<any>;
+    public milestones: ko.ObservableArray<any>;
 
     constructor(host: string, token: string) {
         if (host) {
