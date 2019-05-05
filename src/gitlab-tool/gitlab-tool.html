@@ -51,9 +51,9 @@
           <tbody data-bind="foreach: projects">
             <td data-bind="text: id"></td>
             <td data-bind="text: name"></td>
-            <td data-bind="text: namespace"></td>
-            <td data-bind="text: httpUrl"></td>
-            <td data-bind="text: sshUrl"></td>
+            <td data-bind="text: namespace.full_path"></td>
+            <td data-bind="text: http_url_to_repo"></td>
+            <td data-bind="text: ssh_url_to_repo"></td>
           </tbody>
         </table>
         <table id="milestones" class="table d-none">
@@ -72,8 +72,8 @@
             <td data-bind="text: title"></td>
             <td data-bind="text: projectName"></td>
             <td data-bind="text: state"></td>
-            <td data-bind="text: dueDate"></td>
-            <td data-bind="text: startDate"></td>
+            <td data-bind="text: due_date"></td>
+            <td data-bind="text: start_date"></td>
           </tbody>
         </table>
       </div>
