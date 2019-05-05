@@ -6,6 +6,7 @@ class GitLabToolViewModel {
     public token: ko.Observable<string>;
     public projects: ko.ObservableArray<any>;
     public milestones: ko.ObservableArray<any>;
+    public busy: ko.Observable<boolean>;
 
     constructor(host: string, token: string) {
         if (host) {
@@ -16,10 +17,11 @@ class GitLabToolViewModel {
         this.token = ko.observable(token);
         this.projects = ko.observableArray();
         this.milestones = ko.observableArray();
+        this.busy = ko.observable(false);
     }
 
     public query() {
-        $("#spinner").removeClass("d-none");
+        this.busy(true);
         const api = new Gitlab({
             host: this.host(),
             token: this.token(),
@@ -54,9 +56,9 @@ class GitLabToolViewModel {
                     // do nothing
                 });
             });
-            $("#spinner").addClass("d-none");
+            this.busy(false);
         }, (reason) => {
-            $("#spinner").addClass("d-none");
+            this.busy(false);
         });
     }
 }
