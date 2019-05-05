@@ -8,7 +8,11 @@ class GitLabToolViewModel {
     public milestones: KnockoutObservableArray<any>;
 
     constructor(host: string, token: string) {
-        this.host = ko.observable(host);
+        if (host) {
+            this.host = ko.observable(host);
+        } else {
+            this.host = ko.observable("https://gitlab.com");
+        }
         this.token = ko.observable(token);
         this.projects = ko.observableArray();
         this.milestones = ko.observableArray();
