@@ -48,29 +48,29 @@ class GitLabToolViewModel {
             this.busy(false);
         });
     }
+
+    public viewProjects(e: HTMLLinkElement) {
+        document.querySelector("#viewProjects").classList.add("active");
+        document.querySelector("#projects").classList.remove("d-none");
+        document.querySelector("#viewMilestones").classList.remove("active");
+        document.querySelector("#milestones").classList.add("d-none");
+    }
+
+    public viewMilestones(e: HTMLLinkElement) {
+        document.querySelector("#viewProjects").classList.remove("active");
+        document.querySelector("#projects").classList.add("d-none");
+        document.querySelector("#viewMilestones").classList.add("active");
+        document.querySelector("#milestones").classList.remove("d-none");
+    }
 }
 
 ko.applyBindings(new GitLabToolViewModel(window.localStorage.getItem("gitlab-tool.url"),
     window.localStorage.getItem("gitlab-tool.token")));
 
-$("#host").on("input", (e) => {
+document.querySelector("#host").addEventListener("input", (e) => {
     window.localStorage.setItem("gitlab-tool.url", (e.target as HTMLInputElement).value);
 });
 
-$("#token").on("input", (e) => {
+document.querySelector("#token").addEventListener("input", (e) => {
     window.localStorage.setItem("gitlab-tool.token", (e.target as HTMLInputElement).value);
-});
-
-$("#viewProjects").on("change", (e) => {
-    if ((e.target as HTMLInputElement).checked) {
-        $("#projects").removeClass("d-none");
-        $("#milestones").addClass("d-none");
-    }
-});
-
-$("#viewMilestones").on("change", (e) => {
-    if ((e.target as HTMLInputElement).checked) {
-        $("#projects").addClass("d-none");
-        $("#milestones").removeClass("d-none");
-    }
 });
