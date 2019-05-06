@@ -47,11 +47,13 @@
             </tr>
           </thead>
           <tbody data-bind="foreach: projects">
-            <td data-bind="text: id"></td>
-            <td data-bind="text: name"></td>
-            <td data-bind="text: namespace.full_path"></td>
-            <td data-bind="text: http_url_to_repo"></td>
-            <td data-bind="text: ssh_url_to_repo"></td>
+            <tr>
+              <td data-bind="text: id"></td>
+              <td data-bind="text: name"></td>
+              <td data-bind="text: namespace.full_path"></td>
+              <td data-bind="text: http_url_to_repo"></td>
+              <td data-bind="text: ssh_url_to_repo"></td>
+            </tr>
           </tbody>
         </table>
         <table id="milestones" class="table d-none">
@@ -66,12 +68,14 @@
             </tr>
           </thead>
           <tbody data-bind="foreach: milestones">
-            <td data-bind="text: id"></td>
-            <td data-bind="text: title"></td>
-            <td data-bind="text: projectName"></td>
-            <td data-bind="text: state"></td>
-            <td data-bind="text: due_date"></td>
-            <td data-bind="text: start_date"></td>
+            <tr>
+              <td data-bind="text: id"></td>
+              <td data-bind="text: title"></td>
+              <td data-bind="text: projectName"></td>
+              <td data-bind="text: state"></td>
+              <td data-bind="text: due_date"></td>
+              <td data-bind="text: start_date"></td>
+            </tr>
           </tbody>
         </table>
       </div>

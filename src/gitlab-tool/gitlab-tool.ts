@@ -25,7 +25,6 @@ class GitLabToolViewModel {
         const api = new Gitlab({
             host: this.host(),
             token: this.token(),
-            url: "",
         });
         api.Projects.all()
         .then((projects: any) => {
