@@ -7,6 +7,8 @@ class GitLabToolViewModel {
     public projects: ko.ObservableArray<any>;
     public milestones: ko.ObservableArray<any>;
     public busy: ko.Observable<boolean>;
+    public projectsVisible: ko.Observable<boolean>;
+    public milestonesVisible: ko.Observable<boolean>;
 
     constructor(host: string, token: string) {
         if (host) {
@@ -18,6 +20,8 @@ class GitLabToolViewModel {
         this.projects = ko.observableArray();
         this.milestones = ko.observableArray();
         this.busy = ko.observable(false);
+        this.projectsVisible = ko.observable(true);
+        this.milestonesVisible = ko.observable(false);
     }
 
     public query() {
@@ -49,17 +53,13 @@ class GitLabToolViewModel {
     }
 
     public viewProjects(e: HTMLLinkElement) {
-        document.querySelector("#viewProjects").classList.add("active");
-        document.querySelector("#projects").classList.remove("d-none");
-        document.querySelector("#viewMilestones").classList.remove("active");
-        document.querySelector("#milestones").classList.add("d-none");
+        this.projectsVisible(true);
+        this.milestonesVisible(false);
     }
 
     public viewMilestones(e: HTMLLinkElement) {
-        document.querySelector("#viewProjects").classList.remove("active");
-        document.querySelector("#projects").classList.add("d-none");
-        document.querySelector("#viewMilestones").classList.add("active");
-        document.querySelector("#milestones").classList.remove("d-none");
+        this.projectsVisible(false);
+        this.milestonesVisible(true);
     }
 }
 

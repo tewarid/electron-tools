@@ -30,13 +30,13 @@
         </div>
         <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a id="viewProjects" class="nav-link active" data-bind="click: viewProjects" href="#">Projects</a>
+            <a id="viewProjects" class="nav-link" data-bind="click: viewProjects, css: { 'active': projectsVisible }" href="#">Projects</a>
           </li>
           <li class="nav-item">
-            <a id="viewMilestones" class="nav-link" data-bind="click: viewMilestones" href="#">Milestones</a>
+            <a id="viewMilestones" class="nav-link" data-bind="click: viewMilestones, css: { 'active': milestonesVisible }" href="#">Milestones</a>
           </li>
         </ul>
-        <table id="projects" class="table">
+        <table id="projects" class="table" data-bind="css: {'d-none': milestonesVisible}">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -56,7 +56,7 @@
             </tr>
           </tbody>
         </table>
-        <table id="milestones" class="table d-none">
+        <table id="milestones" class="table" data-bind="css: {'d-none': projectsVisible}">
           <thead>
             <tr>
               <th scope="col">#</th>
