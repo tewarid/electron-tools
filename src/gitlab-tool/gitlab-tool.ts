@@ -10,18 +10,15 @@ class GitLabToolViewModel {
     public projectsVisible: ko.Observable<boolean>;
     public milestonesVisible: ko.Observable<boolean>;
 
-    constructor(host: string, token: string) {
-        if (host) {
-            this.host = ko.observable(host);
-        } else {
-            this.host = ko.observable("https://gitlab.com");
-        }
-        this.token = ko.observable(token);
-        this.projects = ko.observableArray();
-        this.milestones = ko.observableArray();
+    constructor() {
+        const config = this.read();
+        this.host = ko.observable(config.host || "https://gitlab.com");
+        this.token = ko.observable(config.token);
+        this.projects = ko.observableArray(config.projects);
+        this.milestones = ko.observableArray(config.milestones);
         this.busy = ko.observable(false);
-        this.projectsVisible = ko.observable(true);
-        this.milestonesVisible = ko.observable(false);
+        this.projectsVisible = ko.observable(config.projectsVisible !== null ? config.projectsVisible : true);
+        this.milestonesVisible = ko.observable(config.milestonesVisible !== null ? config.milestonesVisible : false);
     }
 
     public query() {
@@ -46,8 +43,10 @@ class GitLabToolViewModel {
                     // do nothing
                 });
             });
+            this.save();
             this.busy(false);
         }, (reason) => {
+            this.save();
             this.busy(false);
         });
     }
@@ -55,21 +54,26 @@ class GitLabToolViewModel {
     public viewProjects(e: HTMLLinkElement) {
         this.projectsVisible(true);
         this.milestonesVisible(false);
+        this.save();
     }
 
     public viewMilestones(e: HTMLLinkElement) {
         this.projectsVisible(false);
         this.milestonesVisible(true);
+        this.save();
+    }
+
+    private read(): any {
+        try {
+            return JSON.parse(window.localStorage.getItem("gitlab-tool.config")) || {};
+        } catch {
+            return  {};
+        }
+    }
+
+    private save() {
+        window.localStorage.setItem("gitlab-tool.config", ko.toJSON(this));
     }
 }
 
-ko.applyBindings(new GitLabToolViewModel(window.localStorage.getItem("gitlab-tool.url"),
-    window.localStorage.getItem("gitlab-tool.token")));
-
-document.querySelector("#host").addEventListener("input", (e) => {
-    window.localStorage.setItem("gitlab-tool.url", (e.target as HTMLInputElement).value);
-});
-
-document.querySelector("#token").addEventListener("input", (e) => {
-    window.localStorage.setItem("gitlab-tool.token", (e.target as HTMLInputElement).value);
-});
+ko.applyBindings(new GitLabToolViewModel());
