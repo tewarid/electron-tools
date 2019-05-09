@@ -5,12 +5,13 @@ import * as fs from "fs";
 import * as path from "path";
 import * as xterm from "xterm";
 
-const code = CodeMirror.fromTextArea(document.getElementById("commands")as HTMLTextAreaElement, {
+const code = CodeMirror.fromTextArea(document.getElementById("commands") as HTMLTextAreaElement, {
     lineNumbers: true,
     mode: "shell",
 });
 code.setSize(null, "100");
-$(".CodeMirror").addClass("border border-primary rounded");
+$(".CodeMirror").addClass("border border-primary rounded")
+    .css("font-size", "large");
 CodeMirror.on(code.getDoc(), "change", (instance, change) => {
     window.localStorage.setItem("git-tool.commands", code.getValue());
 });
