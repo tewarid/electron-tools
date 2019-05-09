@@ -34,12 +34,15 @@ class GitLabToolViewModel {
             this.projects.removeAll();
             this.milestones.removeAll();
             projects.forEach((p: any) => {
-                this.projects.push(p);
+                this.projects.push({http_url_to_repo: p.http_url_to_repo, id: p.id,
+                    name: p.name, namespace: {full_path: p.namespace.full_path},
+                    ssh_url_to_repo: p.ssh_url_to_repo});
                 api.ProjectMilestones.all(p.id)
                 .then((milestones: any) => {
                     milestones.forEach((m: any) => {
-                        m.projectName = p.name;
-                        this.milestones.push(m);
+                        this.milestones.push({due_date: m.due_date, id: m.id,
+                            projectName: p.name, start_date: m.start_date,
+                            state: m.state, title: m.title});
                     });
                 }, (reason) => {
                     // do nothing
