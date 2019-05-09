@@ -17,8 +17,10 @@ class GitLabToolViewModel {
         this.projects = ko.observableArray(config.projects);
         this.milestones = ko.observableArray(config.milestones);
         this.busy = ko.observable(false);
-        this.projectsVisible = ko.observable(config.projectsVisible !== null ? config.projectsVisible : true);
-        this.milestonesVisible = ko.observable(config.milestonesVisible !== null ? config.milestonesVisible : false);
+        this.projectsVisible = ko.observable(config.projectsVisible !== undefined
+            ? config.projectsVisible : true);
+        this.milestonesVisible = ko.observable(config.milestonesVisible !== undefined
+            ? config.milestonesVisible : false);
     }
 
     public query() {
