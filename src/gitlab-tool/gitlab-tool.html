@@ -14,30 +14,30 @@
       <div class="col">
         <div class="form-group">
           <label for="host">GitLab Host</label>
-          <input id="host" data-bind="value: host" type="url" class="form-control" value="https://gitlab.com">
+          <input data-bind="value: host" type="url" class="form-control" value="https://gitlab.com">
           </select>
         </div>
         <div class="form-group">
           <label for="token">Token</label>
-          <input id="token" data-bind="value: token" type="password" class="form-control">
+          <input data-bind="value: token" type="password" class="form-control">
           </select>
         </div>
         <div class="form-group">
-          <button id="query" data-bind="click: query" class="btn btn-primary">Query
-            <span id="spinner" data-bind="visible: busy" class="spinner-border spinner-border-sm">
+          <button data-bind="click: query" class="btn btn-primary">Query
+            <span data-bind="visible: busy" class="spinner-border spinner-border-sm">
             </span>
           </button>
         </div>
         <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a id="viewProjects" class="nav-link" data-bind="click: viewProjects, css: { 'active': projectsVisible }" href="#">Projects</a>
+            <a class="nav-link" data-bind="click: viewProjects, css: { 'active': projectsVisible }" href="#">Projects</a>
           </li>
           <li class="nav-item">
-            <a id="viewMilestones" class="nav-link" data-bind="click: viewMilestones, css: { 'active': milestonesVisible }" href="#">Milestones</a>
+            <a class="nav-link" data-bind="click: viewMilestones, css: { 'active': milestonesVisible }" href="#">Milestones</a>
           </li>
         </ul>
         <div class="table-responsive text-nowrap">
-          <table id="projects" class="table table-borderless table-sm" data-bind="css: {'d-none': milestonesVisible}">
+          <table class="table table-borderless table-sm" data-bind="css: {'d-none': milestonesVisible}">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -57,7 +57,7 @@
               </tr>
             </tbody>
           </table>
-          <table id="milestones" class="table table-borderless table-sm" data-bind="css: {'d-none': projectsVisible}">
+          <table class="table table-borderless table-sm" data-bind="css: {'d-none': projectsVisible}">
             <thead>
               <tr>
                 <th scope="col">#</th>
