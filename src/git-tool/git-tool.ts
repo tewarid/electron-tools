@@ -28,13 +28,15 @@ $(document).ready(() => {
     term.write(window.localStorage.getItem("git-tool.log"));
 });
 
+let rootFolder: string;
+
 $("#rootFolder").on("change", (e) => {
     if ((e.target as HTMLInputElement).files[0] == null) {
         return;
     }
-    const folder = (e.target as HTMLInputElement).files[0].path;
-    window.localStorage.setItem("git-tool.rootFolder", folder);
-    scan(folder);
+    rootFolder = (e.target as HTMLInputElement).files[0].path;
+    window.localStorage.setItem("git-tool.rootFolder", rootFolder);
+    scan(rootFolder);
 });
 
 function scan(root: string) {
@@ -92,28 +94,34 @@ $("#run").on("click", (e) => {
         completed: () => {
             $("#spinner").addClass("d-none");
         },
-        executed: (folder: string, command: string, output: string) => {
-            let s = `${(new Date()).toISOString()} ${folder}\n`;
-            s += `$ ${command}\n${output}\n`;
+        executed: (result: any) => {
+            let s = `${(new Date()).toISOString()} ${result.command.folder}\n`;
+            s += `$ ${result.command.command}\n${result.output}\n`;
             term.write(s);
             window.localStorage.setItem("git-tool.log",
                 window.localStorage.getItem("git-tool.log") + s);
         },
     };
     $("#folders option:selected").each((index, option) => {
-        getSelectedCommands().forEach((c: string) => {
-            if (c.trim() === "") {
-                return;
-            }
-            config.commands.push({
-                command: "git " + c,
-                folder: (option as HTMLInputElement).value,
-            });
-        });
+        config.commands = config.commands.concat(buildGitCommands((option as HTMLInputElement).value));
     });
     config.commands.reverse();
     process(config);
 });
+
+function buildGitCommands(folder: string): any {
+    const commands: any = [];
+    getSelectedCommands().forEach((c: string) => {
+        if (c.trim() === "") {
+            return;
+        }
+        commands.push({
+            command: "git " + c,
+            folder,
+        });
+    });
+    return commands;
+}
 
 function process(config: any) {
     if (config.commands.length === 0) {
@@ -121,11 +129,17 @@ function process(config: any) {
         return;
     }
     const command = config.commands.pop();
-    execute(command.folder, command.command)
-    .then((value: string) => {
-        config.executed(command.folder, command.command, value);
+    if (command.command.indexOf("git clone") !== -1) {
+        config.executed({command,
+            output: "\x1B[1;3;31mSkipping clone command. Please use submodule command instead.\x1B[0m\n"});
         process(config);
-    });
+    } else {
+        execute(command.folder, command.command)
+        .then((value: string) => {
+            config.executed({command, output: value});
+            process(config);
+        });
+    }
 }
 
 function execute(folder: string, command: string) {
