@@ -24,8 +24,8 @@ class ProjectsViewModel extends ViewModelBase {
     public query() {
         this.busy(true);
         const api = new Gitlab({
-            host: ViewModelBase.host,
-            token: ViewModelBase.token,
+            host: ViewModelBase.settings.host(),
+            token: ViewModelBase.settings.token(),
         });
         api.Projects.all()
         .then((projects: any) => {

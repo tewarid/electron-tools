@@ -1,4 +1,5 @@
+import SettingsViewModel from "./settings";
+
 export class ViewModelBase {
-    protected static host: string = "https://gitlab.com";
-    protected static token: string = "";
+    protected static settings: SettingsViewModel;
 }

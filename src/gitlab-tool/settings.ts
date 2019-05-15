@@ -8,11 +8,10 @@ class SettingsViewModel extends ViewModelBase {
 
     constructor() {
         super();
+        ViewModelBase.settings = this;
         const saved = this.read();
-        ViewModelBase.host = saved.host || ViewModelBase.host;
-        this.host = ko.observable(SettingsViewModel.host);
-        ViewModelBase.token = saved.token || ViewModelBase.token;
-        this.token = ko.observable(ViewModelBase.token);
+        this.host = ko.observable(saved.host || "https://gitlab.com");
+        this.token = ko.observable(saved.token || "");
         this.busy = ko.observable(false);
     }
 
@@ -25,8 +24,6 @@ class SettingsViewModel extends ViewModelBase {
     }
 
     private save(): void {
-        ViewModelBase.host = this.host();
-        ViewModelBase.token = this.token();
         window.localStorage.setItem("gitlab-tool.SettingsViewModel", ko.toJSON(this));
     }
 }
