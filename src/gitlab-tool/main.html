@@ -10,76 +10,13 @@
 
 <body>
   <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <div class="form-group">
-          <label for="host">GitLab Host</label>
-          <input data-bind="value: host" type="url" class="form-control" value="https://gitlab.com">
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="token">Token</label>
-          <input data-bind="value: token" type="password" class="form-control">
-          </select>
-        </div>
-        <div class="form-group">
-          <button data-bind="click: query" class="btn btn-primary">Query
-            <span data-bind="visible: busy" class="spinner-border spinner-border-sm">
-            </span>
-          </button>
-        </div>
-        <ul class="nav nav-tabs">
-          <li class="nav-item">
-            <a class="nav-link" data-bind="click: viewProjects, css: { 'active': projectsVisible }" href="#">Projects</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-bind="click: viewMilestones, css: { 'active': milestonesVisible }" href="#">Milestones</a>
-          </li>
-        </ul>
-        <div class="table-responsive text-nowrap">
-          <table class="table table-borderless table-sm" data-bind="css: {'d-none': milestonesVisible}">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Project Name</th>
-                <th scope="col">Namespace</th>
-                <th scope="col">SSH URL</th>
-                <th scope="col">HTTP URL</th>
-              </tr>
-            </thead>
-            <tbody data-bind="foreach: projects">
-              <tr>
-                <td data-bind="text: id"></td>
-                <td data-bind="text: name"></td>
-                <td data-bind="text: namespace.full_path"></td>
-                <td data-bind="text: ssh_url_to_repo"></td>
-                <td data-bind="text: http_url_to_repo"></td>
-              </tr>
-            </tbody>
-          </table>
-          <table class="table table-borderless table-sm" data-bind="css: {'d-none': projectsVisible}">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Milestone Title</th>
-                <th scope="col">Project Name</th>
-                <th scope="col">State</th>
-                <th scope="col">Due Date</th>
-                <th scope="col">Start Date</th>
-              </tr>
-            </thead>
-            <tbody data-bind="foreach: milestones">
-              <tr>
-                <td data-bind="text: id"></td>
-                <td data-bind="text: title"></td>
-                <td data-bind="text: projectName"></td>
-                <td data-bind="text: state"></td>
-                <td data-bind="text: due_date"></td>
-                <td data-bind="text: start_date"></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+    <div class="row border rounded p-1 m-1">
+      <div class="col" data-bind="component: 'settings'">
+      </div>
+    </div>
+    <div class="row p-1 m-1">
+      <div class="col" data-bind="component: 'projects'">
+      </div>
       </div>
     </div>
   </div>
