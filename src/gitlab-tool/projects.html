@@ -1,4 +1,8 @@
 <div class="form-group">
+    <label for="search">Return list of projects matching the search criteria</label>
+    <input id="search" data-bind="value: search" type="input" class="form-control">
+</div>
+<div class="form-group">
     <button data-bind="click: query" class="btn btn-primary">Query
         <span data-bind="visible: busy" class="spinner-border spinner-border-sm">
         </span>
@@ -28,9 +32,9 @@
             <tr>
                 <td data-bind="text: id"></td>
                 <td data-bind="text: name"></td>
-                <td data-bind="text: namespace.full_path"></td>
-                <td data-bind="text: ssh_url_to_repo"></td>
-                <td data-bind="text: http_url_to_repo"></td>
+                <td data-bind="text: namespace.fullPath"></td>
+                <td data-bind="text: sshUrlToRepo"></td>
+                <td data-bind="text: httpUrlToRepo"></td>
             </tr>
         </tbody>
     </table>
@@ -51,8 +55,8 @@
                 <td data-bind="text: title"></td>
                 <td data-bind="text: projectName"></td>
                 <td data-bind="text: state"></td>
-                <td data-bind="text: due_date"></td>
-                <td data-bind="text: start_date"></td>
+                <td data-bind="text: dueDate"></td>
+                <td data-bind="text: startDate"></td>
             </tr>
         </tbody>
     </table>

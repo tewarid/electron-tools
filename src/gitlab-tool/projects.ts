@@ -8,17 +8,19 @@ class ProjectsViewModel extends ViewModelBase {
     public busy: ko.Observable<boolean>;
     public projectsVisible: ko.Observable<boolean>;
     public milestonesVisible: ko.Observable<boolean>;
+    public search: ko.Observable<string>;
 
     constructor() {
         super();
-        const config = this.read();
-        this.projects = ko.observableArray(config.projects);
-        this.milestones = ko.observableArray(config.milestones);
+        const saved = this.read();
+        this.projects = ko.observableArray(saved.projects);
+        this.milestones = ko.observableArray(saved.milestones);
         this.busy = ko.observable(false);
-        this.projectsVisible = ko.observable(config.projectsVisible !== undefined
-            ? config.projectsVisible : true);
-        this.milestonesVisible = ko.observable(config.milestonesVisible !== undefined
-            ? config.milestonesVisible : false);
+        this.projectsVisible = ko.observable(saved.projectsVisible !== undefined
+            ? saved.projectsVisible : true);
+        this.milestonesVisible = ko.observable(saved.milestonesVisible !== undefined
+            ? saved.milestonesVisible : false);
+        this.search = ko.observable(saved.search);
     }
 
     public query() {
@@ -27,19 +29,21 @@ class ProjectsViewModel extends ViewModelBase {
             host: ViewModelBase.settings.host(),
             token: ViewModelBase.settings.token(),
         });
-        api.Projects.all()
+        api.Projects.all({
+            search: this.search(),
+        })
         .then((projects: any) => {
             this.projects.removeAll();
             this.milestones.removeAll();
             projects.forEach((p: any) => {
-                this.projects.push({http_url_to_repo: p.http_url_to_repo, id: p.id,
-                    name: p.name, namespace: {full_path: p.namespace.full_path},
-                    ssh_url_to_repo: p.ssh_url_to_repo});
+                this.projects.push({httpUrlToRepo: p.httpUrlToRepo, id: p.id,
+                    name: p.name, namespace: {fullPath: p.namespace.fullPath},
+                    sshUrlToRepo: p.sshUrlToRepo});
                 api.ProjectMilestones.all(p.id)
                 .then((milestones: any) => {
                     milestones.forEach((m: any) => {
-                        this.milestones.push({due_date: m.due_date, id: m.id,
-                            projectName: p.name, start_date: m.start_date,
+                        this.milestones.push({dueDate: m.dueDate, id: m.id,
+                            projectName: p.name, startDate: m.startDate,
                             state: m.state, title: m.title});
                     });
                 }, (reason) => {
