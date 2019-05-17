@@ -12,6 +12,7 @@ class ProjectsViewModel extends ViewModelBase {
 
     constructor() {
         super();
+        this.typeName = "ProjectsViewModel";
         const saved = this.read();
         this.projects = ko.observableArray(saved.projects);
         this.milestones = ko.observableArray(saved.milestones);
@@ -68,18 +69,6 @@ class ProjectsViewModel extends ViewModelBase {
         this.projectsVisible(false);
         this.milestonesVisible(true);
         this.save();
-    }
-
-    private read(): any {
-        try {
-            return JSON.parse(window.localStorage.getItem("gitlab-tool.ProjectsViewModel")) || {};
-        } catch {
-            return  {};
-        }
-    }
-
-    private save() {
-        window.localStorage.setItem("gitlab-tool.ProjectsViewModel", ko.toJSON(this));
     }
 }
 
