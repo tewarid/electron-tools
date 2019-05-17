@@ -1,18 +1,8 @@
-import * as fs from "fs";
 import * as ko from "knockout";
-import * as path from "path";
 import { ViewModelBase } from "./common";
+import {CustomLoader} from "./loader";
 
-ko.components.register("settings", {
-    synchronous: true,
-    template: fs.readFileSync(path.join(__dirname, "settings.html")).toString(),
-    viewModel: require("./settings"),
-});
-
-ko.components.register("projects", {
-    template: fs.readFileSync(path.join(__dirname, "projects.html")).toString(),
-    viewModel: require("./projects"),
-});
+ko.components.loaders.push(new CustomLoader());
 
 class MainViewModel extends ViewModelBase {
     private component: ko.Observable<string>;
@@ -25,13 +15,8 @@ class MainViewModel extends ViewModelBase {
         this.component(saved.component || "settings");
     }
 
-    private showProjects() {
-        this.component("projects");
-        this.save();
-    }
-
-    private showSettings() {
-        this.component("settings");
+    private showComponent(component: string) {
+        this.component(component);
         this.save();
     }
 }
