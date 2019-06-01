@@ -36,12 +36,14 @@ class ProjectsViewModel extends ViewModelBase {
         .then((projects: any) => {
             this.projects.removeAll();
             this.milestones.removeAll();
+            const promises: any = [];
             projects.forEach((p: any) => {
                 this.projects.push({httpUrlToRepo: p.httpUrlToRepo, id: p.id,
                     name: p.name, namespace: {fullPath: p.namespace.fullPath},
                     sshUrlToRepo: p.sshUrlToRepo});
-                api.ProjectMilestones.all(p.id)
-                .then((milestones: any) => {
+                const promise = api.ProjectMilestones.all(p.id);
+                promises.push(promise);
+                promise.then((milestones: any) => {
                     milestones.forEach((m: any) => {
                         this.milestones.push({dueDate: m.dueDate, id: m.id,
                             projectName: p.name, startDate: m.startDate,
@@ -51,11 +53,15 @@ class ProjectsViewModel extends ViewModelBase {
                     // do nothing
                 });
             });
-            this.save();
-            this.busy(false);
+            Promise.all(promises).then((values) => {
+                this.save();
+                this.busy(false);
+            }, (reason) => {
+                this.save();
+                this.busy(false);
+            });
         }, (reason) => {
-            this.save();
-            this.busy(false);
+            // do nothing
         });
     }
 
