@@ -24,7 +24,7 @@ $(".xterm").addClass("border border-secondary rounded");
 
 $(document).ready(() => {
     scan(window.localStorage.getItem("git-tool.rootFolder"));
-    code.setValue(window.localStorage.getItem("git-tool.commands"));
+    code.setValue(window.localStorage.getItem("git-tool.commands") || "status");
     term.write(window.localStorage.getItem("git-tool.log"));
 });
 
