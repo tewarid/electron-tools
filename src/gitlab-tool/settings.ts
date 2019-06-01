@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-import { ViewModelBase } from "./common";
+import { ViewModelBase } from "../ko/common";
 
 class SettingsViewModel extends ViewModelBase {
     public host: ko.Observable<string>;

@@ -1,6 +1,6 @@
 import {Gitlab} from "gitlab";
 import * as ko from "knockout";
-import { ViewModelBase } from "./common";
+import { ViewModelBase } from "../ko/common";
 
 class ProjectsViewModel extends ViewModelBase {
     public projects: ko.ObservableArray<any>;

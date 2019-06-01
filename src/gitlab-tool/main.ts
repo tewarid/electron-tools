@@ -1,21 +1,25 @@
 import * as ko from "knockout";
-import { ViewModelBase } from "./common";
-import {CustomLoader} from "./loader";
+import { ViewModelBase } from "../ko/common";
+import {CustomLoader} from "../ko/loader";
 
-ko.components.loaders.push(new CustomLoader());
+ko.components.loaders.push(new CustomLoader(__dirname));
 
 class MainViewModel extends ViewModelBase {
     private component: ko.Observable<string>;
 
     constructor() {
+        ViewModelBase.prefix = "gitlab-tool";
         super();
         this.typeName = "MainViewModel";
         this.component = ko.observable();
-        const saved = this.read();
-        this.component(saved.component || "settings");
+        this.showComponent();
     }
 
-    private showComponent(component: string) {
+    private showComponent(component: string = null) {
+        if (component == null) {
+            const saved = this.read();
+            component = saved.component || "settings";
+        }
         this.component(component);
         this.save();
     }

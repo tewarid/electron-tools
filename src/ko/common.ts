@@ -1,9 +1,8 @@
 import * as ko from "knockout";
-import SettingsViewModel from "./settings";
 
 export class ViewModelBase {
-    protected static settings: SettingsViewModel;
-    private static readonly prefix: string = "gitlab-tool";
+    protected static settings: any;
+    protected static prefix: string = "ko";
     protected typeName: string = "ViewModelBase";
 
     protected read(): any {
