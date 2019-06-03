@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import { ViewModelBase } from "../ko/common";
-import {CustomLoader} from "../ko/loader";
+import { CustomLoader } from "../ko/loader";
 
 ko.components.loaders.push(new CustomLoader(__dirname));
 
