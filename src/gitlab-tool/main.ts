@@ -1,6 +1,7 @@
 import * as ko from "knockout";
 import { ViewModelBase } from "../ko/common";
 import { CustomLoader } from "../ko/loader";
+import SettingsViewModel from "./settings";
 
 ko.components.loaders.push(new CustomLoader(__dirname));
 
@@ -12,6 +13,7 @@ class MainViewModel extends ViewModelBase {
         super();
         this.typeName = "MainViewModel";
         this.component = ko.observable();
+        ViewModelBase.settings = new SettingsViewModel();
         this.showComponent();
     }
 
