@@ -10,19 +10,19 @@ import { ViewModelBase } from "../ko/common";
 class MainViewModel extends ViewModelBase {
     private code: CodeMirror.EditorFromTextArea;
     private term: xterm.Terminal;
-    private busy: ko.Observable;
-    private rootFolder: ko.Observable;
-    private gitFolders: ko.ObservableArray;
-    private selectedFolders: ko.ObservableArray;
+    private busy: ko.Observable<boolean>;
+    private rootFolder: ko.Observable<string>;
+    private gitFolders: ko.ObservableArray<string>;
+    private selectedFolders: ko.ObservableArray<string>;
 
     constructor() {
         ViewModelBase.prefix = "git-tool";
         super();
         this.typeName = "MainViewModel";
-        this.busy = ko.observable(false);
-        this.rootFolder = ko.observable("");
-        this.gitFolders = ko.observableArray();
-        this.selectedFolders = ko.observableArray();
+        this.busy = ko.observable<boolean>(false);
+        this.rootFolder = ko.observable<string>("");
+        this.gitFolders = ko.observableArray<string>();
+        this.selectedFolders = ko.observableArray<string>();
         this.setRootFolder(window.localStorage.getItem("git-tool.rootFolder"));
         this.code = CodeMirror.fromTextArea(document.getElementById("commands") as HTMLTextAreaElement, {
             lineNumbers: true,
@@ -92,6 +92,7 @@ class MainViewModel extends ViewModelBase {
                     window.localStorage.getItem("git-tool.log") + s);
             },
         };
+        window.localStorage.setItem("git-tool.selectedFolders", JSON.stringify(this.selectedFolders()));
         this.selectedFolders().forEach((folder) => {
             config.commands = config.commands
                 .concat(this.buildGitCommands(folder));
