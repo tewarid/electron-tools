@@ -8,22 +8,33 @@ import * as xterm from "xterm";
 import { ViewModelBase } from "../ko/common";
 
 class MainViewModel extends ViewModelBase {
+    private readonly replacer: string[] = [
+        "busy",
+        "rootFolder",
+        "gitFolders",
+        "selectedFolders",
+        "gitCommands",
+        "log"];
     private code: CodeMirror.EditorFromTextArea;
     private term: xterm.Terminal;
     private busy: ko.Observable<boolean>;
     private rootFolder: ko.Observable<string>;
     private gitFolders: ko.ObservableArray<string>;
     private selectedFolders: ko.ObservableArray<string>;
+    private gitCommands: ko.Observable<string>;
+    private log: ko.Observable<string>;
 
     constructor() {
-        ViewModelBase.prefix = "git-tool";
         super();
+        ViewModelBase.prefix = "git-tool";
         this.typeName = "MainViewModel";
         this.busy = ko.observable<boolean>(false);
-        this.rootFolder = ko.observable<string>("");
-        this.gitFolders = ko.observableArray<string>();
-        this.selectedFolders = ko.observableArray<string>();
-        this.setRootFolder(window.localStorage.getItem("git-tool.rootFolder"));
+        const saved = this.read();
+        this.rootFolder = ko.observable<string>(saved.rootFolder);
+        this.gitFolders = ko.observableArray<string>(saved.gitFolders);
+        this.selectedFolders = ko.observableArray<string>(saved.selectedFolders);
+        this.gitCommands = ko.observable<string>(saved.gitCommands);
+        this.log = ko.observable<string>(saved.log);
         this.code = CodeMirror.fromTextArea(document.getElementById("commands") as HTMLTextAreaElement, {
             lineNumbers: true,
             mode: "shell",
@@ -31,21 +42,25 @@ class MainViewModel extends ViewModelBase {
         this.code.setSize(null, "100");
         $(".CodeMirror").addClass("border border-primary rounded").css("font-size", "large");
         CodeMirror.on(this.code.getDoc(), "change", (instance, change) => {
-            window.localStorage.setItem("git-tool.commands", this.code.getValue());
+            this.gitCommands(this.code.getValue());
         });
-        this.code.setValue(window.localStorage.getItem("git-tool.commands") || "status");
+        this.code.setValue(this.gitCommands() || "status");
         this.term = new xterm.Terminal();
         this.term.setOption("convertEol", true);
         this.term.resize(80, 30);
         this.term.open(document.getElementById("log"));
         $(".xterm").addClass("border border-secondary rounded");
-        this.term.write(window.localStorage.getItem("git-tool.log"));
+        this.term.write(this.log() || "");
+    }
+
+    protected save(): void {
+        super.save(this.replacer);
     }
 
     private setRootFolder(folder: string) {
         this.rootFolder(folder);
-        window.localStorage.setItem("git-tool.rootFolder", folder);
         this.scan(this.rootFolder());
+        this.save();
     }
 
     private scan(root: string) {
@@ -56,9 +71,9 @@ class MainViewModel extends ViewModelBase {
         this.find(root, (folder: string) => {
             this.gitFolders.push(folder);
         });
+        const copy = this.selectedFolders.slice(0);
         this.selectedFolders.removeAll();
-        JSON.parse(window.localStorage.getItem("git-tool.selectedFolders"))
-        .forEach((value: string) => {
+        copy.forEach((value: string) => {
             this.selectedFolders.push(value);
         });
     }
@@ -83,16 +98,15 @@ class MainViewModel extends ViewModelBase {
             commands: new Array(),
             completed: () => {
                 this.busy(false);
+                this.save();
             },
             executed: (result: any) => {
                 let s = `${(new Date()).toISOString()} ${result.command.folder}\n`;
                 s += `$ ${result.command.command}\n${result.output}\n`;
                 this.term.write(s);
-                window.localStorage.setItem("git-tool.log",
-                    window.localStorage.getItem("git-tool.log") + s);
+                this.log(this.log() + s);
             },
         };
-        window.localStorage.setItem("git-tool.selectedFolders", JSON.stringify(this.selectedFolders()));
         this.selectedFolders().forEach((folder) => {
             config.commands = config.commands
                 .concat(this.buildGitCommands(folder));
@@ -160,7 +174,8 @@ class MainViewModel extends ViewModelBase {
 
     private clearTerminal() {
         this.term.clear();
-        window.localStorage.removeItem("git-tool.log");
+        this.log("");
+        this.save();
     }
 }
 
