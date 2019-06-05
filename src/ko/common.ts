@@ -13,7 +13,8 @@ export class ViewModelBase {
         }
     }
 
-    protected save() {
-        window.localStorage.setItem(`${ViewModelBase.prefix}.${this.typeName}`, ko.toJSON(this));
+    protected save(replacer: any = null) {
+        window.localStorage.setItem(`${ViewModelBase.prefix}.${this.typeName}`,
+        ko.toJSON(this, replacer));
     }
 }
