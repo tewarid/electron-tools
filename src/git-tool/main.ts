@@ -7,16 +7,26 @@ import * as path from "path";
 import * as xterm from "xterm";
 import { ViewModelBase } from "../ko/common";
 
+const code = CodeMirror.fromTextArea(document.getElementById("commands") as HTMLTextAreaElement, {
+    lineNumbers: true,
+    mode: "shell",
+});
+code.setSize(null, "100");
+$(".CodeMirror").addClass("border border-primary rounded").css("font-size", "large");
+
+const term = new xterm.Terminal();
+term.setOption("convertEol", true);
+term.resize(80, 30);
+term.open(document.getElementById("log"));
+$(".xterm").addClass("border border-secondary rounded");
+
 class MainViewModel extends ViewModelBase {
     private readonly replacer: string[] = [
-        "busy",
         "rootFolder",
         "gitFolders",
         "selectedFolders",
         "gitCommands",
         "log"];
-    private code: CodeMirror.EditorFromTextArea;
-    private term: xterm.Terminal;
     private busy: ko.Observable<boolean>;
     private rootFolder: ko.Observable<string>;
     private gitFolders: ko.ObservableArray<string>;
@@ -35,22 +45,11 @@ class MainViewModel extends ViewModelBase {
         this.selectedFolders = ko.observableArray<string>(saved.selectedFolders);
         this.gitCommands = ko.observable<string>(saved.gitCommands);
         this.log = ko.observable<string>(saved.log);
-        this.code = CodeMirror.fromTextArea(document.getElementById("commands") as HTMLTextAreaElement, {
-            lineNumbers: true,
-            mode: "shell",
+        CodeMirror.on(code.getDoc(), "change", (instance, change) => {
+            this.gitCommands(code.getValue());
         });
-        this.code.setSize(null, "100");
-        $(".CodeMirror").addClass("border border-primary rounded").css("font-size", "large");
-        CodeMirror.on(this.code.getDoc(), "change", (instance, change) => {
-            this.gitCommands(this.code.getValue());
-        });
-        this.code.setValue(this.gitCommands() || "status");
-        this.term = new xterm.Terminal();
-        this.term.setOption("convertEol", true);
-        this.term.resize(80, 30);
-        this.term.open(document.getElementById("log"));
-        $(".xterm").addClass("border border-secondary rounded");
-        this.term.write(this.log() || "");
+        code.setValue(this.gitCommands() || "status");
+        term.write(this.log() || "");
     }
 
     protected save(): void {
@@ -103,7 +102,7 @@ class MainViewModel extends ViewModelBase {
             executed: (result: any) => {
                 let s = `${(new Date()).toISOString()} ${result.command.folder}\n`;
                 s += `$ ${result.command.command}\n${result.output}\n`;
-                this.term.write(s);
+                term.write(s);
                 this.log(this.log() + s);
             },
         };
@@ -116,9 +115,9 @@ class MainViewModel extends ViewModelBase {
     }
 
     private getSelectedCommands(): string[] {
-        let commands = this.code.getDoc().getSelection();
+        let commands = code.getDoc().getSelection();
         if (commands === "") {
-            commands = this.code.getValue();
+            commands = code.getValue();
         }
         return commands.split("\n");
     }
@@ -173,7 +172,7 @@ class MainViewModel extends ViewModelBase {
     }
 
     private clearTerminal() {
-        this.term.clear();
+        term.clear();
         this.log("");
         this.save();
     }
