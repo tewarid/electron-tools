@@ -7,7 +7,7 @@
     "build": "tsc && cpx \"src/**/*.{html,png,jpg,ico,icns,svg}\" dist",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "start": "npm run build && electron ./dist/main.js",
-    "package": "npm run build && electron-packager . \"Networking Tools\" --all --overwrite --icon ./dist/app.icns",
+    "package": "npm run build && electron-packager . \"Networking Tools\" --all --overwrite --icon ./dist/app.icns --ignore=/src",
     "dev": "concurrently --kill-others \"tsc -w\" \"cpx \\\"src/**/*.{html,png,jpg,ico,icns,svg}\\\" dist --watch\" \"electron --remote-debugging-port=9222 ./dist/main.js\""
   },
   "repository": "https://github.com/tewarid/net-tools-electron",
