@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Git Tool</title>
     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="../../node_modules/xterm/dist/xterm.css">
+    <link rel="stylesheet" href="../../node_modules/xterm/css/xterm.css">
     <link rel="stylesheet"href="../../node_modules/codemirror/lib/codemirror.css">
   </head>
   <body>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-12 col-lg-5">
+        <div class="col-sm-12 col-lg-5" style="height: 95vh;">
           <div class="form-group">
             <label for="rootFolder">Select root folder</label>
             <div class="custom-file">
@@ -19,26 +19,26 @@
               <label class="custom-file-label" for="rootFolder" data-bind="text: rootFolder">Pick root folder</label>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" style="height: 50%;">
             <label for="folders">Select Git repo(s)</label>
-            <select id="folders" data-bind="options: gitFolders, selectedOptions: selectedFolders" class="form-control" multiple="true">
+            <select id="folders" data-bind="options: gitFolders, selectedOptions: selectedFolders" class="form-control" multiple="true" style="height: 92%;">
             </select>
           </div>
-          <div class="form-group">
+          <div class="form-group" style="height: 30%;">
             <label for="commands">Git command(s)</label>
-            <textarea id="commands" class="form-control">status</textarea>
+            <textarea id="commands" class="form-control" style="height: 90%;">status</textarea>
           </div>
           <div class="form-group">
-            <button data-bind="click: runCommands" class="btn btn-primary">Run
+            <button data-bind="click: runCommands" class="btn btn-primary float-right">Run
               <span data-bind="visible: busy" class="spinner-border spinner-border-sm">
               </span>
             </button>
           </div>
         </div>
-        <div class="col-sm-12 col-lg-7">
-          <div class="form-group">
+        <div class="col-sm-12 col-lg-7" style="height: 95vh;">
+          <div class="form-group" style="height: 90%;">
             <label for="log">Output</label>
-            <div id="log" class=""></div>
+            <div id="log" class="" style="height: 98%;"></div>
           </div>
           <div class="form-group">
               <button data-bind="click: clearTerminal" class="btn btn-secondary float-right">Clear</button>

@@ -4,7 +4,8 @@ import "codemirror/mode/shell/shell";
 import * as fs from "fs";
 import * as ko from "knockout";
 import * as path from "path";
-import * as xterm from "xterm";
+import { Terminal } from "xterm";
+import { FitAddon } from "xterm-addon-fit";
 import { ViewModelBase } from "../ko/common";
 
 const code = CodeMirror.fromTextArea(document.getElementById("commands") as HTMLTextAreaElement, {
@@ -12,13 +13,19 @@ const code = CodeMirror.fromTextArea(document.getElementById("commands") as HTML
     mode: "shell",
 });
 code.setSize(null, "100");
-$(".CodeMirror").addClass("border border-primary rounded").css("font-size", "large");
+$(".CodeMirror").addClass("border border-primary rounded").css("font-size", "large").css("height", "90%");
 
-const term = new xterm.Terminal();
+const term = new Terminal();
+const fitAddon = new FitAddon();
+term.loadAddon(fitAddon);
 term.setOption("convertEol", true);
-term.resize(80, 30);
 term.open(document.getElementById("log"));
 $(".xterm").addClass("border border-secondary rounded");
+fitAddon.fit();
+
+$(window).resize(() => {
+    fitAddon.fit();
+});
 
 class MainViewModel extends ViewModelBase {
     private readonly replacer: string[] = [
