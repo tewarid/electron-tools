@@ -13,7 +13,7 @@ const code = CodeMirror.fromTextArea(document.getElementById("commands") as HTML
     mode: "shell",
 });
 code.setSize(null, "100");
-$(".CodeMirror").addClass("border border-primary rounded").css("font-size", "large").css("height", "90%");
+$(".CodeMirror").addClass("border border-primary rounded").css("font-size", "large").css("flex-grow", "1");
 
 const term = new Terminal();
 const fitAddon = new FitAddon();

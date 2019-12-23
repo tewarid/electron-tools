@@ -19,31 +19,31 @@
               <label class="custom-file-label" for="rootFolder" data-bind="text: rootFolder">Pick root folder</label>
             </div>
           </div>
-          <div class="form-group" style="height: 50%;">
+          <div class="form-group" style="height: 50%; display: flex; flex-direction: column;">
             <label for="folders">Select Git repo(s)</label>
-            <select id="folders" data-bind="options: gitFolders, selectedOptions: selectedFolders" class="form-control" multiple="true" style="height: 92%;">
+            <select id="folders" data-bind="options: gitFolders, selectedOptions: selectedFolders" class="form-control" multiple="true" style="flex-grow: 1;">
             </select>
           </div>
-          <div class="form-group" style="height: 30%;">
+          <div class="form-group" style="height: 30%; display: flex; flex-direction: column;">
             <label for="commands">Git command(s)</label>
-            <textarea id="commands" class="form-control" style="height: 90%;">status</textarea>
+            <textarea id="commands" class="form-control" style="flex-grow: 1;">status</textarea>
           </div>
           <div class="form-group">
-            <button data-bind="click: runCommands" class="btn btn-primary float-right">Run
+            <button data-bind="click: runCommands" class="btn btn-primary float-left">Run
               <span data-bind="visible: busy" class="spinner-border spinner-border-sm">
               </span>
             </button>
           </div>
         </div>
-        <div class="col-sm-12 col-lg-7" style="height: 95vh;">
-          <div class="form-group" style="height: 90%;">
-            <label for="log">Output</label>
-            <div id="log" class="" style="height: 98%;"></div>
-          </div>
+        <div class="col-sm-12 col-lg-7" style="height: 90vh;">
           <div class="form-group">
-              <button data-bind="click: clearTerminal" class="btn btn-secondary float-right">Clear</button>
-            </div>
+            <button data-bind="click: clearTerminal" class="btn btn-secondary float-right">Clear</button>
           </div>
+          <div class="form-group" style="height: 100%;">
+            <label for="log">Output</label>
+            <div id="log" style="height: 100%;"></div>
+          </div>
+        </div>
       </div>
     </div>
     <script>
