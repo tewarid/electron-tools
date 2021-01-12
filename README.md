@@ -3,8 +3,8 @@
 ## Run from source
 
 ```bash
-git clone https://github.com/tewarid/net-tools-electron
-cd net-tools-electron
+git clone https://github.com/tewarid/electron-tools
+cd electron-tools
 npm install
 npm run start
 ```
@@ -18,8 +18,8 @@ npm run dev
 ## Package using electron-packager
 
 ```bash
-git clone https://github.com/tewarid/net-tools-electron
-cd net-tools-electron
+git clone https://github.com/tewarid/electron-tools
+cd electron-tools
 npm install
 npm run package
 ```
