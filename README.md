@@ -1,4 +1,4 @@
-# Electron Tools
+# Tools for Desktop
 
 ## Run from source
 
