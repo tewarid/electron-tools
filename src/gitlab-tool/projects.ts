@@ -1,4 +1,4 @@
-import {Gitlab} from "gitlab";
+import {Gitlab} from "@gitbeaker/node";
 import * as ko from "knockout";
 import { ViewModelBase } from "../ko/common";
 
@@ -49,8 +49,6 @@ class ProjectsViewModel extends ViewModelBase {
                             projectName: p.name, startDate: m.startDate,
                             state: m.state, title: m.title});
                     });
-                }, (reason) => {
-                    // do nothing
                 });
             });
             Promise.all(promises).then((values) => {
